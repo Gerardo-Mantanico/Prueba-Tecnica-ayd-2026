@@ -1,1 +1,1 @@
-# Prueba-T-cnica-ayd-2026
+# Prueba-Tecnica-ayd-2026
