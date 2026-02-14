@@ -21,11 +21,11 @@ public class Curso {
     }
 
    
-    public String getNobmre() {
+    public String getNombre() {
         return nombre;
     }
 
-    public void setNobmre(String nombre) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
@@ -36,6 +36,9 @@ public class Curso {
     public void setGrado(String grado) {
         this.grado = grado;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Curso{nombre='" + nombre + "', grado='" + grado + "'}";
+    }
 }
