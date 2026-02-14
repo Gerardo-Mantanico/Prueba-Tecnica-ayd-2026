@@ -10,19 +10,4 @@
         <maven.compiler.release>25</maven.compiler.release>
         <exec.mainClass>com.mycompany.pruebatecnica2.PruebaTecnica2</exec.mainClass>
     </properties>
-    <dependencies>
-        <!-- JUnit 5 para pruebas unitarias -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 </project>

@@ -22,7 +22,7 @@ public class ControladorSistema {
      * Método para imprimir todos los estudiantes y sus cursos
      */
     public void imprimirEstudiantes() {
-        System.out.println("Lista de Estudiantes");
+        System.out.println("========== Lista de Estudiantes ==========");
         
         if (baseDatos.isEmpty()) {
             System.out.println("No hay estudiantes registrados.");
@@ -39,10 +39,11 @@ public class ControladorSistema {
                 System.out.println("  - Sin cursos asignados");
             } else {
                 for (Curso curso : estudiante.getCursos()) {
-                    System.out.println("  - " + curso.getNobmre() + " (Grado: " + curso.getGrado() + ")");
+                    System.out.println("  - " + curso.getNombre() + " (Grado: " + curso.getGrado() + ")");
                 }
             }
         }
+        System.out.println("==========================================");
     }
     
     /**
