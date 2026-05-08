@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderProcessingExample.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GlobalShop Order Processing - Refactored</a> &gt; <a href="index.source.html" class="el_package">com.globalshop.order</a> &gt; <span class="el_source">OrderProcessingExample.java</span></div><h1>OrderProcessingExample.java</h1><pre class="source lang-java linenums">package com.globalshop.order;
+
+import com.globalshop.order.domain.*;
+import com.globalshop.order.pricing.PriceCalculationFacade;
+import com.globalshop.order.service.OrderProcessingService;
+import com.globalshop.order.notification.impl.EmailNotificationService;
+import com.globalshop.order.command.OrderCommandProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+<span class="nc" id="L11">public class OrderProcessingExample {</span>
+
+<span class="nc" id="L13">    private static final Logger logger = LoggerFactory.getLogger(OrderProcessingExample.class);</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L16">        logger.info(&quot;EJEMPLO DE PROCESAMIENTO DE ORDENES&quot;);</span>
+
+<span class="nc" id="L18">        PriceCalculationFacade calculador = new PriceCalculationFacade();</span>
+
+<span class="nc" id="L20">        OrderProcessingService servicio = new OrderProcessingService(</span>
+            calculador,
+            new EmailNotificationService()
+        );
+
+<span class="nc" id="L25">        logger.info(&quot;=== Ejemplo 1: Orden STANDARD con descuento ===&quot;);</span>
+
+<span class="nc" id="L27">        Order orden1 = new OrderBuilder(100.0, OrderType.STANDARD, CustomerType.RETAIL)</span>
+<span class="nc" id="L28">            .conPremium(true)</span>
+<span class="nc" id="L29">            .conCodigo(&quot;SAVE10&quot;)</span>
+<span class="nc" id="L30">            .construir();</span>
+
+<span class="nc" id="L32">        logger.info(&quot;Orden creada: {}&quot;, orden1);</span>
+
+<span class="nc" id="L34">        OrderCommandProcessor.ReporteProcesamiento reporte =</span>
+<span class="nc" id="L35">            servicio.procesarOrden(orden1, &quot;cliente@ejemplo.com&quot;);</span>
+
+<span class="nc" id="L37">        logger.info(&quot;Resultado: {}&quot;, reporte.getResumen());</span>
+<span class="nc" id="L38">        logger.info(&quot;  Precio base: Q{}&quot;, String.format(&quot;%.2f&quot;, orden1.getMontoBase()));</span>
+<span class="nc" id="L39">        logger.info(&quot;  Precio final: Q{}&quot;, String.format(&quot;%.2f&quot;, orden1.getPrecioFinal()));</span>
+<span class="nc" id="L40">        logger.info(&quot;  Ahorro: Q{}&quot;, String.format(&quot;%.2f&quot;, orden1.calcularAhorro()));</span>
+
+<span class="nc" id="L42">        logger.info(&quot;=== Ejemplo 2: Orden BULK con descuento escalonado ===&quot;);</span>
+
+<span class="nc" id="L44">        Order orden2 = new OrderBuilder(6000.0, OrderType.BULK, CustomerType.WHOLESALE)</span>
+<span class="nc" id="L45">            .conCodigo(&quot;BLACKFRIDAY&quot;)</span>
+<span class="nc" id="L46">            .construir();</span>
+
+<span class="nc" id="L48">        reporte = servicio.procesarOrden(orden2, &quot;mayorista@proveedor.com&quot;);</span>
+
+<span class="nc" id="L50">        logger.info(&quot;Resultado: {}&quot;, reporte.getResumen());</span>
+<span class="nc" id="L51">        logger.info(&quot;  Precio base: Q{}&quot;, String.format(&quot;%.2f&quot;, orden2.getMontoBase()));</span>
+<span class="nc" id="L52">        logger.info(&quot;  Precio final: Q{}&quot;, String.format(&quot;%.2f&quot;, orden2.getPrecioFinal()));</span>
+<span class="nc" id="L53">        logger.info(&quot;  Ahorro: Q{}&quot;, String.format(&quot;%.2f&quot;, orden2.calcularAhorro()));</span>
+
+<span class="nc" id="L55">        logger.info(&quot;=== Ejemplo 3: Orden EXPRESS internacional fin de semana ===&quot;);</span>
+
+<span class="nc" id="L57">        Order orden3 = new OrderBuilder(500.0, OrderType.EXPRESS, CustomerType.INTERNATIONAL)</span>
+<span class="nc" id="L58">            .conFindeSemana(true)</span>
+<span class="nc" id="L59">            .conPremium(true)</span>
+<span class="nc" id="L60">            .construir();</span>
+
+<span class="nc" id="L62">        reporte = servicio.procesarOrden(orden3, &quot;intl@exterior.com&quot;);</span>
+
+<span class="nc" id="L64">        logger.info(&quot;Resultado: {}&quot;, reporte.getResumen());</span>
+<span class="nc" id="L65">        logger.info(&quot;  Precio base: Q{}&quot;, String.format(&quot;%.2f&quot;, orden3.getMontoBase()));</span>
+<span class="nc" id="L66">        logger.info(&quot;  Precio final: Q{}&quot;, String.format(&quot;%.2f&quot;, orden3.getPrecioFinal()));</span>
+
+<span class="nc" id="L68">        logger.info(&quot;=== Ejemplo 4: Cálculo de precio solamente ===&quot;);</span>
+
+<span class="nc" id="L70">        Order orden4 = new OrderBuilder(250.0, OrderType.STANDARD, CustomerType.RETAIL)</span>
+<span class="nc" id="L71">            .conPremium(false)</span>
+<span class="nc" id="L72">            .conCodigo(&quot;WELCOME&quot;)</span>
+<span class="nc" id="L73">            .construir();</span>
+
+<span class="nc" id="L75">        double precio = servicio.calcularPrecio(orden4);</span>
+<span class="nc" id="L76">        logger.info(&quot;Cotización: Q{}&quot;, String.format(&quot;%.2f&quot;, precio));</span>
+
+<span class="nc" id="L78">        logger.info(&quot;=== Ejemplo 5: Procesamiento en lote ===&quot;);</span>
+
+<span class="nc" id="L80">        Order[] ordenes = {</span>
+<span class="nc" id="L81">            new OrderBuilder(100.0, OrderType.STANDARD, CustomerType.RETAIL).conPremium(true).construir(),</span>
+<span class="nc" id="L82">            new OrderBuilder(1000.0, OrderType.BULK, CustomerType.WHOLESALE).construir(),</span>
+<span class="nc" id="L83">            new OrderBuilder(300.0, OrderType.EXPRESS, CustomerType.INTERNATIONAL).conFindeSemana(true).construir(),</span>
+<span class="nc" id="L84">            new OrderBuilder(500.0, OrderType.STANDARD, CustomerType.RETAIL).conCodigo(&quot;SAVE20&quot;).construir(),</span>
+<span class="nc" id="L85">            new OrderBuilder(2000.0, OrderType.BULK, CustomerType.INTERNATIONAL).conCodigo(&quot;SAVE10&quot;).construir(),</span>
+        };
+
+<span class="nc" id="L88">        double totalBase = 0;</span>
+<span class="nc" id="L89">        double totalFinal = 0;</span>
+<span class="nc" id="L90">        int exitosos = 0;</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for (int i = 0; i &lt; ordenes.length; i++) {</span>
+<span class="nc" id="L93">            Order orden = ordenes[i];</span>
+<span class="nc" id="L94">            totalBase += orden.getMontoBase();</span>
+
+<span class="nc" id="L96">            reporte = servicio.procesarOrden(</span>
+                orden,
+<span class="nc" id="L98">                String.format(&quot;cliente%d@ejemplo.com&quot;, i + 1)</span>
+            );
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (reporte.fueExitoso()) {</span>
+<span class="nc" id="L102">                totalFinal += orden.getPrecioFinal();</span>
+<span class="nc" id="L103">                exitosos++;</span>
+<span class="nc" id="L104">                logger.info(&quot;  {} OK Q{} -&gt; Q{}&quot;,</span>
+<span class="nc" id="L105">                    i + 1,</span>
+<span class="nc" id="L106">                    String.format(&quot;%.2f&quot;, orden.getMontoBase()),</span>
+<span class="nc" id="L107">                    String.format(&quot;%.2f&quot;, orden.getPrecioFinal())</span>
+                );
+            } else {
+<span class="nc" id="L110">                logger.warn(&quot;  {} FALLO en procesamiento&quot;, i + 1);</span>
+            }
+        }
+
+<span class="nc" id="L114">        logger.info(&quot;RESUMEN DE LOTE:&quot;);</span>
+<span class="nc" id="L115">        logger.info(&quot;  Total órdenes: {}&quot;, ordenes.length);</span>
+<span class="nc" id="L116">        logger.info(&quot;  Exitosas: {}&quot;, exitosos);</span>
+<span class="nc" id="L117">        logger.info(&quot;  Total base: Q{}&quot;, String.format(&quot;%.2f&quot;, totalBase));</span>
+<span class="nc" id="L118">        logger.info(&quot;  Total final: Q{}&quot;, String.format(&quot;%.2f&quot;, totalFinal));</span>
+<span class="nc" id="L119">        logger.info(&quot;  Ahorros totales: Q{}&quot;, String.format(&quot;%.2f&quot;, totalBase - totalFinal));</span>
+
+<span class="nc" id="L121">        logger.info(&quot;=== Ejemplo 6: Registrar descuento personalizado ===&quot;);</span>
+
+<span class="nc" id="L123">        PriceCalculationFacade.DiscountRegistry registro =</span>
+            new PriceCalculationFacade.DiscountRegistry();
+
+<span class="nc" id="L126">        registro.registrar(&quot;FERIADO&quot;, new com.globalshop.order.pricing.discount.DiscountStrategy() {</span>
+            @Override
+            public double aplicarDescuento(double precioActual) {
+<span class="nc" id="L129">                return precioActual * 0.85;</span>
+            }
+            @Override
+<span class="nc" id="L132">            public String getCodigo() { return &quot;FERIADO&quot;; }</span>
+            @Override
+<span class="nc" id="L134">            public double getPorcentaje() { return 15.0; }</span>
+        });
+
+<span class="nc" id="L137">        logger.info(&quot;Descuento FERIADO registrado: {}&quot;,</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            registro.esCodigoValido(&quot;FERIADO&quot;) ? &quot;valido&quot; : &quot;invalido&quot;);</span>
+<span class="nc" id="L139">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotifyCustomerCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GlobalShop Order Processing - Refactored</a> &gt; <a href="index.source.html" class="el_package">com.globalshop.order.command.impl</a> &gt; <span class="el_source">NotifyCustomerCommand.java</span></div><h1>NotifyCustomerCommand.java</h1><pre class="source lang-java linenums">package com.globalshop.order.command.impl;
+
+import com.globalshop.order.command.OrderCommand;
+import com.globalshop.order.command.OrderCommandResult;
+import com.globalshop.order.domain.Order;
+import com.globalshop.order.notification.NotificationService;
+
+public class NotifyCustomerCommand implements OrderCommand {
+
+    private final Order orden;
+    private final NotificationService servicio;
+    private final String email;
+
+<span class="fc" id="L14">    public NotifyCustomerCommand(Order orden, NotificationService servicio, String email) {</span>
+<span class="fc" id="L15">        this.orden = orden;</span>
+<span class="fc" id="L16">        this.servicio = servicio;</span>
+<span class="fc" id="L17">        this.email = email;</span>
+<span class="fc" id="L18">    }</span>
+
+    @Override
+    public OrderCommandResult ejecutar() {
+        try {
+<span class="fc" id="L23">            boolean notificado = servicio.notificarProcesada(orden, email);</span>
+
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">            if (!notificado) {</span>
+<span class="nc" id="L26">                return OrderCommandResult.fallo(</span>
+                    &quot;No se pudo notificar al cliente: &quot; + email,
+                    new RuntimeException(&quot;El servicio de notificación retornó false&quot;)
+                );
+            }
+
+<span class="fc" id="L32">            return OrderCommandResult.exito(&quot;Cliente notificado: &quot; + email);</span>
+
+<span class="nc" id="L34">        } catch (Exception e) {</span>
+<span class="nc" id="L35">            return OrderCommandResult.fallo(&quot;Error notificando cliente: &quot; + email, e);</span>
+        }
+    }
+
+    @Override
+    public String getNombre() {
+<span class="fc" id="L41">        return &quot;NotifyCustomerCommand&quot;;</span>
+    }
+
+    @Override
+    public Order getOrden() {
+<span class="nc" id="L46">        return orden;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

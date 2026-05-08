@@ -1,0 +1,5 @@
+/home/gerardo/Downloads/proyecto-refactorizado/src/test/java/com/globalshop/order/integration/OrderProcessingIntegrationTests.java
+/home/gerardo/Downloads/proyecto-refactorizado/src/test/java/com/globalshop/order/domain/OrderBuilderTests.java
+/home/gerardo/Downloads/proyecto-refactorizado/src/test/java/com/globalshop/order/pricing/discount/DiscountStrategyTests.java
+/home/gerardo/Downloads/proyecto-refactorizado/src/test/java/com/globalshop/order/pricing/PriceCalculationFacadeTests.java
+/home/gerardo/Downloads/proyecto-refactorizado/src/test/java/com/globalshop/order/pricing/strategy/PricingStrategyTests.java

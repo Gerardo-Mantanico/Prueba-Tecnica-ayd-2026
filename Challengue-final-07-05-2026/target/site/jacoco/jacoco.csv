@@ -1,0 +1,29 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.discount,NoDiscount,0,9,0,0,0,4,0,4,0,4
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.discount,BlackFridayDiscount,0,11,0,0,0,4,0,4,0,4
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.discount,Save10Discount,0,11,0,0,0,4,0,4,0,4
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.discount,WelcomeDiscount,2,9,0,0,1,3,1,3,1,3
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.discount,Save20Discount,0,11,0,0,0,4,0,4,0,4
+GlobalShop Order Processing - Refactored,com.globalshop.order.service,OrderProcessingService,11,62,1,1,2,16,1,4,0,4
+GlobalShop Order Processing - Refactored,com.globalshop.order,OrderProcessingExample,467,0,6,0,77,0,6,0,3,0
+GlobalShop Order Processing - Refactored,com.globalshop.order,OrderProcessingExample.new DiscountStrategy() {...},11,0,0,0,4,0,4,0,4,0
+GlobalShop Order Processing - Refactored,com.globalshop.order.notification.impl,EmailNotificationService,48,0,2,0,8,0,5,0,4,0
+GlobalShop Order Processing - Refactored,com.globalshop.order.notification.impl,LegacyEmailAdapter,52,0,4,0,13,0,5,0,3,0
+GlobalShop Order Processing - Refactored,com.globalshop.order.notification.impl,NoOpNotificationService,2,5,0,0,1,2,1,2,1,2
+GlobalShop Order Processing - Refactored,com.globalshop.order.notification,LegacyEmailClient,45,0,0,0,7,0,5,0,5,0
+GlobalShop Order Processing - Refactored,com.globalshop.order.config,PricingConstants,0,22,0,6,0,8,0,5,0,2
+GlobalShop Order Processing - Refactored,com.globalshop.order.domain,CustomerType,3,32,0,0,1,7,1,2,1,2
+GlobalShop Order Processing - Refactored,com.globalshop.order.domain,OrderType,6,38,0,0,2,8,2,2,2,2
+GlobalShop Order Processing - Refactored,com.globalshop.order.domain,Order,7,248,8,18,1,41,9,22,1,17
+GlobalShop Order Processing - Refactored,com.globalshop.order.domain,OrderBuilder,0,52,0,0,0,15,0,5,0,5
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing,PriceCalculationFacade,8,133,2,4,2,30,2,7,0,6
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing,PriceCalculationFacade.DiscountRegistry,0,70,1,3,0,15,1,7,0,6
+GlobalShop Order Processing - Refactored,com.globalshop.order.command,OrderCommandResult,31,33,0,0,4,10,3,5,3,5
+GlobalShop Order Processing - Refactored,com.globalshop.order.command,OrderCommand,5,0,0,0,1,0,1,0,1,0
+GlobalShop Order Processing - Refactored,com.globalshop.order.command,OrderCommandProcessor.ReporteProcesamiento,19,60,4,2,4,11,6,4,3,4
+GlobalShop Order Processing - Refactored,com.globalshop.order.command,OrderCommandProcessor,129,127,9,5,29,27,8,7,2,6
+GlobalShop Order Processing - Refactored,com.globalshop.order.command.impl,CalculatePriceCommand,22,63,0,0,6,15,2,4,2,4
+GlobalShop Order Processing - Refactored,com.globalshop.order.command.impl,NotifyCustomerCommand,19,29,1,1,4,9,2,3,1,3
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.strategy,ExpressOrderStrategy,0,27,0,4,0,8,0,5,0,3
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.strategy,BulkOrderStrategy,0,13,0,0,0,4,0,3,0,3
+GlobalShop Order Processing - Refactored,com.globalshop.order.pricing.strategy,StandardOrderStrategy,4,57,1,7,0,15,1,10,0,6

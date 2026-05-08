@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PriceCalculationFacade.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GlobalShop Order Processing - Refactored</a> &gt; <a href="index.source.html" class="el_package">com.globalshop.order.pricing</a> &gt; <span class="el_source">PriceCalculationFacade.java</span></div><h1>PriceCalculationFacade.java</h1><pre class="source lang-java linenums">package com.globalshop.order.pricing;
+
+import com.globalshop.order.domain.*;
+import com.globalshop.order.pricing.discount.*;
+import com.globalshop.order.pricing.strategy.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class PriceCalculationFacade {
+
+<span class="fc" id="L14">    private static final Logger logger = LoggerFactory.getLogger(PriceCalculationFacade.class);</span>
+
+    private final Map&lt;OrderType, PricingStrategy&gt; estrategias;
+    private final DiscountRegistry registroDescuentos;
+
+<span class="fc" id="L19">    public PriceCalculationFacade() {</span>
+<span class="fc" id="L20">        this.estrategias = inicializarEstrategias();</span>
+<span class="fc" id="L21">        this.registroDescuentos = new DiscountRegistry();</span>
+<span class="fc" id="L22">    }</span>
+
+    private Map&lt;OrderType, PricingStrategy&gt; inicializarEstrategias() {
+<span class="fc" id="L25">        Map&lt;OrderType, PricingStrategy&gt; mapa = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L26">        mapa.put(OrderType.STANDARD, new StandardOrderStrategy());</span>
+<span class="fc" id="L27">        mapa.put(OrderType.EXPRESS, new ExpressOrderStrategy());</span>
+<span class="fc" id="L28">        mapa.put(OrderType.BULK, new BulkOrderStrategy());</span>
+<span class="fc" id="L29">        return mapa;</span>
+    }
+
+    public double calcularPrecioFinal(Order orden) {
+<span class="fc" id="L33">        logger.debug(&quot;Iniciando cálculo de precio para: {}&quot;, orden);</span>
+
+<span class="fc" id="L35">        double precioEstrategia = aplicarEstrategia(orden);</span>
+<span class="fc" id="L36">        logger.debug(&quot;Precio después de estrategia: Q{}&quot;, String.format(&quot;%.2f&quot;, precioEstrategia));</span>
+
+<span class="fc" id="L38">        double precioFinal = aplicarDescuento(orden, precioEstrategia);</span>
+<span class="fc" id="L39">        logger.debug(&quot;Precio final: Q{}&quot;, String.format(&quot;%.2f&quot;, precioFinal));</span>
+
+<span class="fc" id="L41">        return precioFinal;</span>
+    }
+
+    private double aplicarEstrategia(Order orden) {
+<span class="fc" id="L45">        PricingStrategy estrategia = estrategias.get(orden.getTipoOrden());</span>
+
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (estrategia == null) {</span>
+<span class="nc" id="L48">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L49">                &quot;No hay estrategia para tipo de orden: &quot; + orden.getTipoOrden()</span>
+            );
+        }
+
+<span class="fc" id="L53">        logger.debug(&quot;Aplicando estrategia: {}&quot;, estrategia.getNombre());</span>
+<span class="fc" id="L54">        return estrategia.calcularPrecio(orden);</span>
+    }
+
+    private double aplicarDescuento(Order orden, double precioActual) {
+<span class="fc" id="L58">        String codigo = orden.getCodigoDescuento();</span>
+
+<span class="pc bpc" id="L60" title="1 of 4 branches missed.">        if (codigo == null || codigo.trim().isEmpty()) {</span>
+<span class="fc" id="L61">            logger.debug(&quot;Sin descuento promocional&quot;);</span>
+<span class="fc" id="L62">            return precioActual;</span>
+        }
+
+<span class="fc" id="L65">        DiscountStrategy descuento = registroDescuentos.getDescuento(codigo);</span>
+<span class="fc" id="L66">        double precioFinal = descuento.aplicarDescuento(precioActual);</span>
+
+<span class="fc" id="L68">        logger.debug(&quot;Descuento '{}' aplicado: {}%&quot;,</span>
+<span class="fc" id="L69">            descuento.getCodigo(),</span>
+<span class="fc" id="L70">            descuento.getPorcentaje()</span>
+        );
+
+<span class="fc" id="L73">        return precioFinal;</span>
+    }
+
+    public static class DiscountRegistry {
+
+<span class="fc" id="L78">        private static final Logger logger = LoggerFactory.getLogger(DiscountRegistry.class);</span>
+
+        private final Map&lt;String, DiscountStrategy&gt; descuentos;
+
+<span class="fc" id="L82">        public DiscountRegistry() {</span>
+<span class="fc" id="L83">            this.descuentos = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L84">            registrarDescuentosBase();</span>
+<span class="fc" id="L85">        }</span>
+
+        private void registrarDescuentosBase() {
+<span class="fc" id="L88">            registrar(&quot;SAVE10&quot;, new Save10Discount());</span>
+<span class="fc" id="L89">            registrar(&quot;SAVE20&quot;, new Save20Discount());</span>
+<span class="fc" id="L90">            registrar(&quot;BLACKFRIDAY&quot;, new BlackFridayDiscount());</span>
+<span class="fc" id="L91">            registrar(&quot;WELCOME&quot;, new WelcomeDiscount());</span>
+<span class="fc" id="L92">        }</span>
+
+        public void registrar(String codigo, DiscountStrategy descuento) {
+<span class="fc" id="L95">            descuentos.put(codigo, descuento);</span>
+<span class="fc" id="L96">            logger.info(&quot;Descuento registrado: {}&quot;, codigo);</span>
+<span class="fc" id="L97">        }</span>
+
+        public DiscountStrategy getDescuento(String codigo) {
+<span class="fc" id="L100">            return descuentos.getOrDefault(codigo, new NoDiscount());</span>
+        }
+
+        public boolean esCodigoValido(String codigo) {
+<span class="pc bpc" id="L104" title="1 of 4 branches missed.">            return codigo != null &amp;&amp; descuentos.containsKey(codigo);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

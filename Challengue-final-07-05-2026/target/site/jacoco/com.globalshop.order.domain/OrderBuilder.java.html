@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GlobalShop Order Processing - Refactored</a> &gt; <a href="index.source.html" class="el_package">com.globalshop.order.domain</a> &gt; <span class="el_source">OrderBuilder.java</span></div><h1>OrderBuilder.java</h1><pre class="source lang-java linenums">package com.globalshop.order.domain;
+
+public final class OrderBuilder {
+
+    private final double montoBase;
+    private final OrderType tipoOrden;
+    private final CustomerType tipoCliente;
+
+<span class="fc" id="L9">    private boolean premium = false;</span>
+<span class="fc" id="L10">    private boolean findeSemana = false;</span>
+<span class="fc" id="L11">    private String codigoDescuento = null;</span>
+
+<span class="fc" id="L13">    public OrderBuilder(double montoBase, OrderType tipoOrden, CustomerType tipoCliente) {</span>
+<span class="fc" id="L14">        this.montoBase = montoBase;</span>
+<span class="fc" id="L15">        this.tipoOrden = tipoOrden;</span>
+<span class="fc" id="L16">        this.tipoCliente = tipoCliente;</span>
+<span class="fc" id="L17">    }</span>
+
+    public OrderBuilder conPremium(boolean premium) {
+<span class="fc" id="L20">        this.premium = premium;</span>
+<span class="fc" id="L21">        return this;</span>
+    }
+
+    public OrderBuilder conFindeSemana(boolean findeSemana) {
+<span class="fc" id="L25">        this.findeSemana = findeSemana;</span>
+<span class="fc" id="L26">        return this;</span>
+    }
+
+    public OrderBuilder conCodigo(String codigo) {
+<span class="fc" id="L30">        this.codigoDescuento = codigo;</span>
+<span class="fc" id="L31">        return this;</span>
+    }
+
+    public Order construir() {
+<span class="fc" id="L35">        return new Order(</span>
+            montoBase,
+            tipoOrden,
+            tipoCliente,
+            premium,
+            findeSemana,
+            codigoDescuento
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
